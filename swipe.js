@@ -19,13 +19,15 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.itemWidth = this.options.itemWidth || undefined;
+  this.overflow = this.options.overflow || 'hidden';
 
   // reference dom elements
   this.container = element;
   this.element = this.container.children[0]; // the slide pane
 
   // static css
-  this.container.style.overflow = 'hidden';
+  this.container.style.overflow = this.overflow;
   this.element.style.listStyle = 'none';
   this.element.style.margin = 0;
 
@@ -61,7 +63,11 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    if (this.itemWidth) {
+      this.with = this.itemWidth;
+    } else {
+      this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    }
 
     // return immediately if measurement fails
     if (!this.width) return null;
